@@ -58,3 +58,21 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
       - "5050:80"
+
+  # ==========================
+  #       Payments Service
+  # ==========================
+  payments-service:
+    container_name: payments-service
+    build: ./payments-ms
+    ports:
+      - ${PAYMENTS_SERVICE_PORT}:${PAYMENTS_SERVICE_PORT}
+    volumes:
+      - ./payments-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - NATS_SERVERS=nats://nats-server:4222
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
