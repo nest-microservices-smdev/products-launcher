@@ -77,3 +77,12 @@ services:
       - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
       - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
       - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+
+  # ==========================
+  #       Auth Service
+  # ==========================
+  auth-service:
+    build: ./auth-ms
+    command: npm run start:dev
+    environment:
+      - NATS_SERVERS=nats://nats-server:4222
