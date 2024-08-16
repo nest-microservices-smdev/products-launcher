@@ -1,0 +1,88 @@
+version: "3"
+
+services:
+  nats-server:
+    image: nats:latest
+
+  client-gateway:
+    build:
+      context: ./client-gateway
+      dockerfile: dockerfile.prod
+    image: client-gateway-prod
+    ports:
+      - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
+    environment:
+      - PORT=${CLIENT_GATEWAY_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+#  products-service:
+#    build: ./products-ms
+#    volumes:
+#      - ./products-ms/src:/usr/src/app/src
+#    command: npm run start:dev
+#    environment:
+#      - NATS_SERVERS=nats://nats-server:4222
+#      - DATABASE_URL=file:./dev.db
+#
+#  orders-service:
+#    depends_on:
+#      - orders-db
+#    build: ./orders-ms
+#    volumes:
+#      - ./orders-ms/src:/usr/src/app/src
+#    command: npm run start:dev
+#    environment:
+#      - PORT=3002
+#      - NATS_SERVERS=nats://nats-server:4222
+#      - DATABASE_URL=postgresql://postgres:123456@orders-db:5432/ordersdb?schema=public
+#
+#  orders-db:
+#    image: postgres:16.2
+#    container_name: orders-database
+#    restart: always
+#    environment:
+#      POSTGRES_DB: ordersdb
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 123456
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - ./orders-ms/postgres:/var/lib/postgresql/data
+#
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+#      PGADMIN_DEFAULT_PASSWORD: "admin"
+#    ports:
+#      - "5050:80"
+#
+#  # ==========================
+#  #       Payments Service
+#  # ==========================
+#  payments-service:
+#    container_name: payments-service
+#    build: ./payments-ms
+#    ports:
+#      - ${PAYMENTS_SERVICE_PORT}:${PAYMENTS_SERVICE_PORT}
+#    volumes:
+#      - ./payments-ms/src:/usr/src/app/src
+#    command: npm run start:dev
+#    environment:
+#      - PORT=${PAYMENTS_SERVICE_PORT}
+#      - NATS_SERVERS=nats://nats-server:4222
+#      - STRIPE_SECRET=${STRIPE_SECRET}
+#      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+#      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+#      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+#
+#  # ==========================
+#  #       Auth Service
+#  # ==========================
+#  auth-service:
+#    build: ./auth-ms
+#    command: npm run start:dev
+#    environment:
+#      - NATS_SERVERS=nats://nats-server:4222
+#      - DATABASE_URL=${AUTH_DATABASE_URL}
+#      - JWT_SECRET=${AUTH_JWT_SECRET}
+#
